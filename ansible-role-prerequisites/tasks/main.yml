@@ -12,31 +12,24 @@
     update_cache: yes
   when: ansible_os_family == 'RedHat'
 
-- name: Install Prerequisites
-  apt:
-    name:
-     - apache2
-     - wget
-    update_cache: yes
-  when: ansible_os_family == 'Debian'
 
-- name: wget zabbix repo ubuntu
-  command: wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+focal_all.deb
-  args:
-    chdir: /tmp/
-    creates: /tmp/zabbix-release_5.0-1+focal_all.deb
+- name: Download zabbix-release_5.0-1+focal_all.deb
+  get_url:
+    url: https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+focal_all.deb
+    dest: /tmp/
+    mode: '600'
   when: ansible_os_family == 'Debian'
 
 - name: download zabbix repo ubuntu
   command: dpkg -i zabbix-release_5.0-1+focal_all.deb
   args:
     chdir: /tmp/
-  
   when: ansible_os_family == 'Debian'
 
 - name: Install Prerequisites
   apt:
     name:
+     - apache2
      - zabbix-agent
     update_cache: yes
   when: ansible_os_family == 'Debian'
@@ -74,5 +67,7 @@
     state: restarted
     enabled: yes
   when: ansible_os_family == 'Debian'
+
+
 
 
