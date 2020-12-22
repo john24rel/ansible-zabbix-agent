@@ -10,16 +10,30 @@
      - epel-release
      - "{{zabbix_repo}}"
     update_cache: yes
-    
-- name: enable php72
-  shell: yum-config-manager --enable "{{php_version}}" 
+  when: ansible_os_family == 'RedHat'
 
+- name: Install Prerequisites
+  package:
+    name:
+     - apache2
+     - "{{zabbix_repo}}"
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+    
+- name: Install zabbix-agent
+  yum:
+    name:
+     - zabbix-agent
+    update_cache: yes
+  when: ansible_os_family == 'RedHat'
 
 - name: Install zabbix-agent
   yum:
     name:
      - zabbix-agent
     update_cache: yes
+  when: ansible_os_family == 'Debian'
+  
 
 - name: creating zabbix_agentd.conf
   template:
@@ -33,10 +47,18 @@
     state: restarted
     enabled: yes
 
-- name: Start Apache
+- name: Start Apache centos
   service:
     name: httpd
     state: restarted
     enabled: yes
+  when: ansible_os_family == 'RedHat'
+
+- name: Start Apache for ubuntu
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
+  when: ansible_os_family == 'Debian'
 
 
