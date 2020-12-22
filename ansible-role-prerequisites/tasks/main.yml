@@ -13,7 +13,7 @@
   when: ansible_os_family == 'RedHat'
 
 
-- name: Download zabbix-release_5.0-1+focal_all.deb
+- name: Download zabbix-release_5.0-1"{{ubuntu_version}}"
   get_url:
     url:  "{{zabbix_release}}"
     dest: /tmp/
@@ -21,7 +21,7 @@
   when: ansible_os_family == 'Debian'
 
 - name: download zabbix repo ubuntu
-  command: dpkg -i zabbix-release_5.0-1+focal_all.deb
+  command: dpkg -i zabbix-release_5.0-1"{{ubuntu_version}}"
   args:
     chdir: /tmp/
   when: ansible_os_family == 'Debian'
