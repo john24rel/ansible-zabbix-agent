@@ -1,0 +1,6 @@
+[web]
+206.189.226.62 ansible_user=centos
+
+[ubuntu]
+[web]
+206.189.188.32  ansible_user=ubuntu
