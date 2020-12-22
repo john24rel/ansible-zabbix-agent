@@ -15,29 +15,17 @@
   shell: yum-config-manager --enable "{{php_version}}" 
 
 
-- name: Install Prerequisites
+- name: Install zabbix-agent
   yum:
     name:
      - zabbix-agent
     update_cache: yes
 
-- name: enable rhel-server
-  shell: yum-config-manager --enable rhel-server-rhscl-7-rpms
+- name: creating zabbix_agentd.conf
+  template:
+    src: "zabbix_agentd.conf"
+    dest: "/etc/zabbix/zabbix_agentd.conf"
 
-
-- name: enable frontend
-  lineinfile:
-    path: /etc/yum.repos.d/zabbix.repo 
-    regexp: '^Zabbix server'
-    line: 'Centos-1'
-
-
-- name: enable frontend
-  lineinfile:
-    path: /etc/yum.repos.d/zabbix.repo 
-    regexp: '^127.0.0.1'
-    line: '59.203.183.136'  
-    
     
 - name: Start zabbix-agent
   service:
