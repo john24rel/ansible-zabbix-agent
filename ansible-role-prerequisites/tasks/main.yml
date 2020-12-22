@@ -13,13 +13,34 @@
   when: ansible_os_family == 'RedHat'
 
 - name: Install Prerequisites
-  package:
+  apt:
     name:
      - apache2
-     - "{{zabbix_repo}}"
+     - wget
     update_cache: yes
   when: ansible_os_family == 'Debian'
-    
+
+- name: wget zabbix repo ubuntu
+  command: wget https://repo.zabbix.com/zabbix/5.0/ubuntu/pool/main/z/zabbix-release/zabbix-release_5.0-1+focal_all.deb
+  args:
+    chdir: /tmp/
+    creates: /tmp/zabbix-release_5.0-1+focal_all.deb
+  when: ansible_os_family == 'Debian'
+
+- name: download zabbix repo ubuntu
+  command: dpkg -i zabbix-release_5.0-1+focal_all.deb
+  args:
+    chdir: /tmp/
+  
+  when: ansible_os_family == 'Debian'
+
+- name: Install Prerequisites
+  apt:
+    name:
+     - zabbix-agent
+    update_cache: yes
+  when: ansible_os_family == 'Debian'
+
 - name: Install zabbix-agent
   yum:
     name:
@@ -27,13 +48,6 @@
     update_cache: yes
   when: ansible_os_family == 'RedHat'
 
-- name: Install zabbix-agent
-  yum:
-    name:
-     - zabbix-agent
-    update_cache: yes
-  when: ansible_os_family == 'Debian'
-  
 
 - name: creating zabbix_agentd.conf
   template:
@@ -56,7 +70,7 @@
 
 - name: Start Apache for ubuntu
   service:
-    name: httpd
+    name: apache2
     state: restarted
     enabled: yes
   when: ansible_os_family == 'Debian'
