@@ -1,5 +1,9 @@
-[web]
+[Centos]
 206.189.226.62 ansible_user=root
+104.248.238.121 ansible_user=root
+104.248.115.146 ansible_user=root
 
-[ubuntu]
+[Ubuntu]
 206.189.188.32  ansible_user=root
+104.248.239.200 ansible_user=root
+67.205.153.58 ansible_user=root
