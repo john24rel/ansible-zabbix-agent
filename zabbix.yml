@@ -1,0 +1,5 @@
+- hosts: localhost
+  tasks:
+  - name: Install Prerequisites
+    import_role:
+      name: ansible-role-prerequisites
